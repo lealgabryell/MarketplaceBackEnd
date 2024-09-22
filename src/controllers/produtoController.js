@@ -1,5 +1,6 @@
 const { asec } = require('mathjs')
 const Produto= require('../models/produto')
+const produto = require('../models/produto')
 
 //Listar um novo produtpo
 
@@ -11,6 +12,15 @@ exports.listar = async (req,res) => {
     res.status(400).json({message: error.message})
    }
 }
+// Listar um produto especifico
+ exports.listarOne = async (req, res) => {
+    try{
+        const produto = await Produto.findById(req.params.id)
+        res.status(200).json(produto);
+    }catch(error){
+        res.status(400).json({message: 'O produto não foi encontrado'})
+    }
+ }
 exports.create= async(req, res) => {
   try{
       const produto= await produto.create( req.body)

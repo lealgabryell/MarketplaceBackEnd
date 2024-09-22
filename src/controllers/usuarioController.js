@@ -14,7 +14,7 @@ exports.listOne = async (req, res) => {
         const usuario = await Usuario.findById(req.params.id)
         res.status(200).json(usuario);
     } catch (error) {
-        res.status(400).json({ message: error.message })
+        res.status(400).json({ message:'usario não encontrado'})
     }
 }
 exports.create = async (req, res) => {
@@ -40,5 +40,14 @@ exports.update = async (req, res) => {
         const usuario= await Usuario.findById(req.params.id, req.body, {new: true})
     } catch (error) {
         res.status(400).json({ message: error.message })
+    }
+}
+//deletar usuarios
+exports.delet = async (req, res) => {
+    try {
+        const usuario = await Usuario.findByIdAndDelete(req.params.id)
+        res.status(204).json(usuario);
+    }catch(error) {
+        res.status(400).json({ message: error.message, content: usuario })
     }
 }
