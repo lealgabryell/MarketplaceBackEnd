@@ -1,53 +1,62 @@
-const Usuario = require('../models/usuario');
+const Usuario = require("../models/usuario");
 
-exports.listAll = async (req, res) => {
+module.exports = {
+  listAll: async (req, res) => {
     try {
-        const usuario = await Usuario.find()
-        res.status(200).json(usuario);
+      const usuario = await Usuario.find();
+      res.status(200).json(usuario);
     } catch (error) {
-        res.status(400).json({ message: error.message })
+      res.status(400).json({ message: error.message });
     }
-}
-//listar um cliente especifico
-exports.listOne = async (req, res) => {
+  },
+  listOne: async (req, res) => {
     try {
-        const usuario = await Usuario.findById(req.params.id)
-        res.status(200).json(usuario);
+      const usuario = await Usuario.findById(req.params.id);
+      res.status(200).json(usuario);
     } catch (error) {
-        res.status(400).json({ message:'usario não encontrado'})
+      res.status(400).json({ message: "usario não encontrado" });
     }
-}
-exports.create = async (req, res) => {
+  },
+  insertOne: async (req, res) => {
     try {
-        const usuario = await Usuario.create(req, res);
-        res.status(201).json(usuario);
+      const usuario = await Usuario.create(req, res);
+      res.status(201).json(usuario);
     } catch (error) {
-        res.status(400).json({ message: error.message })
+      res.status(400).json({ message: error.message });
     }
-}
-//criar varios usuarios
-exports.createMany = async (req, res) => {
+  },
+  insertMany: async (req, res) => {
     try {
-        const createMany = await Usuario.createMany(req.body)
-        res.status(201).json(usuario);
+      const usuarios = await Usuario.insertMany(req.body);
+      res.status(201).json({
+        message: `${usuarios.length} Inseridos com sucesso!`,
+        content: usuarios,
+      });
     } catch (error) {
-        res.status(400).json({ message: error.message })
+      res.status(400).json({ message: error.message });
     }
-}
-//Atualizar os usuarios 
-exports.update = async (req, res) => {
+  },
+  updateById: async (req, res) => {
     try {
-        const usuario= await Usuario.findById(req.params.id, req.body, {new: true})
+      await Usuario.findByIdAndUpdate(req.params.id, req.body);
+      const usuarioAtualizado = await Usuario.findById(req.params.id);
+      res.status(201).json({
+        message: "Atualizado com sucesso!",
+        content: usuarioAtualizado,
+      });
     } catch (error) {
-        res.status(400).json({ message: error.message })
+      res.status(404).json({ message: error.message });
     }
-}
-//deletar usuarios
-exports.delet = async (req, res) => {
+  },
+  deleteById: async (req, res) => {
     try {
-        const usuario = await Usuario.findByIdAndDelete(req.params.id)
-        res.status(204).json(usuario);
-    }catch(error) {
-        res.status(400).json({ message: error.message, content: usuario })
+      const usuario = await Usuario.findByIdAndDelete(req.params.id);
+      res.status(204).json({
+        message: "Usuário deletado com sucesso!",
+        content: usuario,
+      });
+    } catch (error) {
+      res.status(404).json({ message: error.message });
     }
-}
+  },
+};

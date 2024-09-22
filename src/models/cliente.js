@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const clienteSchema = new mongoose.Schema({
   nome: { type: String, required: true },
@@ -12,4 +12,4 @@ const clienteSchema = new mongoose.Schema({
   desconto: { type: Boolean, default: false },
 });
 
-module.exports = mongoose.model('Cliente', clienteSchema);
+module.exports = mongoose.model("clientes", clienteSchema);
