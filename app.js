@@ -5,8 +5,9 @@ require("dotenv").config();
 const clientRoute = require("./src/routes/clienteRoute");
 const productRoute = require("./src/routes/produtoRoute");
 const userRoute = require("./src/routes/usuarioRoute");
-
+const middlewareAuth = require("./src/MiddleawareAuth")
 app.use(express.json());
+app.use(middlewareAuth)
 app.use("/clientes", clientRoute);
 app.use("/produtos", productRoute);
 app.use("/usuarios", userRoute);

@@ -1,5 +1,5 @@
 const Usuario = require("../models/usuario");
-
+const jwtService = require('jsonwebtoken')
 module.exports = {
   listAll: async (req, res) => {
     try {
@@ -59,4 +59,17 @@ module.exports = {
       res.status(404).json({ message: error.message });
     }
   },
+  login: async (req, res) => {
+    const user = await Usuario.findOne({ email: req.body.email, senha: req.body.senha })
+    if (user) {
+      try {
+        const result = await jwtService.sign(req.body, process.env.SECRET)
+        if (result) {
+          res.status(200).json({ message: 'Usuário autorizado com sucesso!', token: result })
+        }
+      } catch(error) {
+        res.status(401).json({message: 'Usuário não autorizado!'})
+       }
+    }
+  }
 };
