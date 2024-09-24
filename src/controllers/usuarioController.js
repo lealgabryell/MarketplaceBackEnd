@@ -19,7 +19,7 @@ module.exports = {
   },
   insertOne: async (req, res) => {
     try {
-      const usuario = await Usuario.create(req, res);
+      const usuario = await Usuario.create(req.body);
       res.status(201).json(usuario);
     } catch (error) {
       res.status(400).json({ message: error.message });
@@ -67,9 +67,9 @@ module.exports = {
         if (result) {
           res.status(200).json({ message: 'Usuário autorizado com sucesso!', token: result })
         }
-      } catch(error) {
-        res.status(401).json({message: 'Usuário não autorizado!'})
-       }
+      } catch (error) {
+        res.status(401).json({ message: 'Usuário não autorizado!' })
+      }
     }
   }
 };

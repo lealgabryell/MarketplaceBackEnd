@@ -3,8 +3,9 @@ const jwtService = require('jsonwebtoken')
 module.exports = (req, res, next) => {
   const path = req.path
   const nonSecurityPath = [
-    '/login',
-    '/about'
+    '/usuarios/login',
+    '/about',
+    '/usuarios'
   ]
 
   if (nonSecurityPath.includes(path)) {

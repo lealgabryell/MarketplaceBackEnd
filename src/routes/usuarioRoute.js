@@ -6,6 +6,7 @@ const {
   listOne,
   deleteById,
   updateById,
+  login,
 } = require("../controllers/usuarioController");
 const router = express.Router();
 
@@ -22,5 +23,5 @@ router
 
 router.route("/:id").get(listOne).put(updateById).delete(deleteById);
 
-router.route('/login').get()
+router.route('/login').post(login)
 module.exports = router;
