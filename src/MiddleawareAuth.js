@@ -5,7 +5,8 @@ module.exports = (req, res, next) => {
   const nonSecurityPath = [
     '/usuarios/login',
     '/about',
-    '/usuarios'
+    '/usuarios',
+    '/produtos'
   ]
 
   if (nonSecurityPath.includes(path)) {

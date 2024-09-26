@@ -8,5 +8,12 @@
   },
   "scripts": {
     "dev": "nodemon app.js"
-  }
+  },
+  "name": "marketplacebackend",
+  "version": "1.0.0",
+  "main": "app.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
