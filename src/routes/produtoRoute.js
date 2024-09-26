@@ -6,6 +6,7 @@ const {
   listOne,
   deleteById,
   updateById,
+  deleteAll,
 } = require("../controllers/produtoController");
 const router = express.Router();
 
@@ -18,7 +19,8 @@ router
       return;
     }
     insertOne(req, res);
-  });
+  })
+  .delete(deleteAll);
 
 router.route("/:id").get(listOne).put(updateById).delete(deleteById);
 

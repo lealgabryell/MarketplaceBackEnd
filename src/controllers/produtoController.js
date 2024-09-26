@@ -62,4 +62,15 @@ module.exports = {
       res.status(400).json({ message: error.message });
     }
   },
+  deleteAll: async (req, res) => {
+    try {
+      const produto = await Produto.deleteMany();
+      res.status(204).json({
+        message: "Produtos deletado com sucesso!",
+        content: produto,
+      });
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  },
 };
