@@ -8,7 +8,7 @@ const produtoSchema = new mongoose.Schema({
   tipo: { type: String, required: true },
   descricao: { type: String, required: true },
   marca: { type: String, default: "Marca desconhecida" },
-  promocao: { type: Boolean, default: false },
+  promocao: { type: Number, default: false },
   preco: { type: Number, required: true },
   dataLancamento: { type: Date, default: Date.now },
   imagem: { type: String, default: loading }
