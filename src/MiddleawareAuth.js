@@ -2,15 +2,12 @@
 
 // module.exports = (req, res, next) => {
 //   const path = req.path;
+//   const mathod = req.method
 //   const nonSecurityPath = [
-//     "/usuarios/login",
-//     "/about",
-//     "/usuarios",
-//     "/produtos",
-//     "/produtos/:id",
+//     "/usuarios/login"
 //   ];
 
-//   if (nonSecurityPath.includes(path)) {
+//   if (nonSecurityPath.includes(path) || path === '/usuarios' && method ==== 'POST') {
 //     return next();
 //   }
 

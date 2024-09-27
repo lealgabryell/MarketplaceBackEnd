@@ -1,5 +1,6 @@
 const Usuario = require("../models/usuario");
 const jwtService = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 module.exports = {
   listAll: async (req, res) => {
     try {
@@ -19,6 +20,8 @@ module.exports = {
   },
   insertOne: async (req, res) => {
     try {
+      const user = req.body
+      user.senha = await bcrypt.hash(user.senha, Number(process.env.ROUNDS))
       const usuario = await Usuario.create(req.body);
       res.status(201).json(usuario);
     } catch (error) {
@@ -60,16 +63,20 @@ module.exports = {
     }
   },
   login: async (req, res) => {
-    const user = await Usuario.findOne({ email: req.body.email, senha: req.body.senha })
-    if (user) {
-      try {
-        const result = await jwtService.sign(req.body, process.env.SECRET)
-        if (result) {
-          res.status(200).json({ message: 'Usuário autorizado com sucesso!', token: result })
+    const userResult = await Usuario.findOne({ email: req.body.email });
+    const { __v, _id, ...user } = userResult.toObject()
+    try {
+      if (user) {
+        const senhaIsValid = await bcrypt.compare(req.body.senha, user.senha)
+        if (senhaIsValid) {
+          const token = await jwtService.sign(user, process.env.SECRET)
+          res.status(200).json({ message: 'Usuário autorizado com sucesso!', token: token })
         }
-      } catch (error) {
-        res.status(401).json({ message: 'Usuário não autorizado!' })
+      } else {
+        throw new Error('Credenciais Inválidas!')
       }
+    } catch (error) {
+      res.status(401).json({ message: 'Usuário não autorizado!' })
     }
   }
 };
