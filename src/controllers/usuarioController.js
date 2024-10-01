@@ -1,6 +1,6 @@
 const Usuario = require("../models/usuario");
-const jwtService = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
+const jwtService = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 module.exports = {
   listAll: async (req, res) => {
     try {
@@ -15,13 +15,13 @@ module.exports = {
       const usuario = await Usuario.findById(req.params.id);
       res.status(200).json(usuario);
     } catch (error) {
-      res.status(400).json({ message: "usario não encontrado" });
+      res.status(400).json({ message: "usuário não encontrado" });
     }
   },
   insertOne: async (req, res) => {
     try {
-      const user = req.body
-      user.senha = await bcrypt.hash(user.senha, Number(process.env.ROUNDS))
+      const user = req.body;
+      user.senha = await bcrypt.hash(user.senha, Number(process.env.ROUNDS));
       const usuario = await Usuario.create(req.body);
       res.status(201).json(usuario);
     } catch (error) {
@@ -63,20 +63,20 @@ module.exports = {
     }
   },
   login: async (req, res) => {
-    const userResult = await Usuario.findOne({ email: req.body.email });
-    const { __v, _id, ...user } = userResult.toObject()
     try {
-      if (user) {
-        const senhaIsValid = await bcrypt.compare(req.body.senha, user.senha)
-        if (senhaIsValid) {
-          const token = await jwtService.sign(user, process.env.SECRET)
-          res.status(200).json({ message: 'Usuário autorizado com sucesso!', token: token })
-        }
-      } else {
-        throw new Error('Credenciais Inválidas!')
-      }
+      const userResult = await Usuario.findOne({ email: req.body.email });
+      if (!userResult) throw new Error("Credenciais Inválidas!");
+
+      const { __v, _id, ...user } = userResult;
+      if (!user) throw new Error("Credenciais Inválidas!");
+      const senhaIsValid = await bcrypt.compare(req.body.senha, user.senha);
+      if (!senhaIsValid) throw new Error("Credenciais Inválidas!");
+      const token = jwtService.sign(user, process.env.SECRET);
+      res
+        .status(200)
+        .json({ message: "Usuário autorizado com sucesso!", token: token });
     } catch (error) {
-      res.status(401).json({ message: 'Usuário não autorizado!' })
+      res.status(401).json({ message: "Usuário não autorizado!" });
     }
-  }
+  },
 };

@@ -9,6 +9,11 @@ const usuarioSchema = new mongoose.Schema({
   dataNascimento: { type: Date, required: true },
   cpf: { type: String, required: true, unique: true },
   dataRegistro: { type: Date, default: Date.now },
+  foto: {
+    type: String,
+    default:
+      "https://www.sociedadepraiana.org.br/packages/trustir/exclusiva/img/user_placeholder.png",
+  },
 });
 
-module.exports = mongoose.model('usuarios', usuarioSchema);
+module.exports = mongoose.model("usuarios", usuarioSchema);

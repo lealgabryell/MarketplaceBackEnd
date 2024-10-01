@@ -23,5 +23,5 @@ router
 
 router.route("/:id").get(listOne).put(updateById).delete(deleteById);
 
-router.route('/login').post(login)
+router.route("/login").post(login);
 module.exports = router;
