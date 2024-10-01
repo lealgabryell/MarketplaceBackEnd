@@ -69,17 +69,19 @@ module.exports = {
   login: async (req, res) => {
     try {
       const userResult = await Usuario.findOne({ email: req.body.email });
-      if (!userResult) throw new Error("Credenciais Inválidas 1!");
+      if (!userResult) throw new Error("Credenciais Inválidas!");
 
       const { __v, _id, ...user } = userResult.toObject();
-      if (!user) throw new Error("Credenciais Inválidas 2!");
+      if (!user) throw new Error("Credenciais Inválidas!");
       const senhaIsValid = await bcrypt.compare(req.body.senha, user.senha);
-      if (!senhaIsValid) throw new Error("Credenciais Inválidas 3!");
+      if (!senhaIsValid) throw new Error("Credenciais Inválidas!");
       const token = jwtService.sign(user, process.env.SECRET);
 
-      res
-        .status(200)
-        .json({ message: "Usuário autorizado com sucesso!", token: token });
+      res.status(200).json({
+        message: "Usuário autorizado com sucesso!",
+        token: token,
+        content: user,
+      });
     } catch (error) {
       res.status(401).json({ message: error.message });
     }
