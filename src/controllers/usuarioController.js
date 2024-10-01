@@ -30,7 +30,11 @@ module.exports = {
   },
   insertMany: async (req, res) => {
     try {
-      const usuarios = await Usuario.insertMany(req.body);
+      const users = req.body;
+      users.forEach(async (user) => {
+        user.senha = await bcrypt.hash(user.senha, Number(process.env.ROUNDS));
+      });
+      const usuarios = await Usuario.insertMany(users);
       res.status(201).json({
         message: `${usuarios.length} Inseridos com sucesso!`,
         content: usuarios,
@@ -65,18 +69,19 @@ module.exports = {
   login: async (req, res) => {
     try {
       const userResult = await Usuario.findOne({ email: req.body.email });
-      if (!userResult) throw new Error("Credenciais Inválidas!");
+      if (!userResult) throw new Error("Credenciais Inválidas 1!");
 
-      const { __v, _id, ...user } = userResult;
-      if (!user) throw new Error("Credenciais Inválidas!");
+      const { __v, _id, ...user } = userResult.toObject();
+      if (!user) throw new Error("Credenciais Inválidas 2!");
       const senhaIsValid = await bcrypt.compare(req.body.senha, user.senha);
-      if (!senhaIsValid) throw new Error("Credenciais Inválidas!");
+      if (!senhaIsValid) throw new Error("Credenciais Inválidas 3!");
       const token = jwtService.sign(user, process.env.SECRET);
+
       res
         .status(200)
         .json({ message: "Usuário autorizado com sucesso!", token: token });
     } catch (error) {
-      res.status(401).json({ message: "Usuário não autorizado!" });
+      res.status(401).json({ message: error.message });
     }
   },
 };
